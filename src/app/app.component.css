@@ -1,0 +1,14 @@
+.container {
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: Center;
+    font-family: sans-serif;
+}
+.sub-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
