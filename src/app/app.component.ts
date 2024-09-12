@@ -16,19 +16,21 @@ export class AppComponent {
   value: number = 0
   ws!: WebSocket
   tokens: number[] = [1076225, 1199105, 758529, 2955009, 3660545]
-  data: liveData[] = []
+
+  dataMap: Map<number, liveData> = new Map<number, liveData>();
 
   constructor() {
 
   }
   ngOnInit() {
-    this.ws = new WebSocket('wss://data.investit.ai');
+    // this.ws = new WebSocket('wss://data.investit.ai');
+    this.ws = new WebSocket('wss://fg-data.investit.ai');
     this.ws.onopen = () => {
       console.log('WebSocket connection established');
       const message = {
-        a: "subscribe",
-        v: this.tokens,
-        mode: "quote"
+        "a": "subscribe",
+        "v": this.tokens,
+        "mode": "ltp"
       };
       // Send the message to the WebSocket server
       this.ws.send(JSON.stringify(message));
@@ -36,6 +38,7 @@ export class AppComponent {
 
     this.ws.onmessage = (event) => {
       this.updateData(JSON.parse(event.data))
+
     };
 
     this.ws.onclose = () => {
@@ -49,11 +52,12 @@ export class AppComponent {
   }
 
   updateData(data: liveData) {
-    if (this.data.some(item => item.instrument_token === data.instrument_token)) {
-      let index = this.data.findIndex(item => item.instrument_token === data.instrument_token)
-     this.data[index] = data
+    //this is way better than findIndex
+    let test = this.dataMap.get(data.instrument_token)
+    if (test) {
+      Object.assign(test, data)
     } else {
-      this.data.push(data)
+      this.dataMap.set(data.instrument_token, data)
     }
   }
 
