@@ -15,7 +15,7 @@ export class AppComponent {
   title = 'myapp';
   value: number = 0
   ws!: WebSocket
-  tokens: number[] = [1076225, 1199105, 758529, 2955009, 3660545]
+  tokens: number[] = []  //Stock market tickers for subscribe
 
   dataMap: Map<number, liveData> = new Map<number, liveData>();
 
@@ -23,8 +23,7 @@ export class AppComponent {
 
   }
   ngOnInit() {
-    // this.ws = new WebSocket('wss://data.investit.ai');
-    this.ws = new WebSocket('wss://fg-data.investit.ai');
+    this.ws = new WebSocket(/* add your web socket connection url**/);
     this.ws.onopen = () => {
       console.log('WebSocket connection established');
       const message = {
